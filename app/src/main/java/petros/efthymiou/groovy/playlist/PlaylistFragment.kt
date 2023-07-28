@@ -9,13 +9,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import petros.efthymiou.groovy.R
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlaylistFragment : Fragment() {
     lateinit var viewModel: PlaylistViewModel
+
+    @Inject
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val service = PlaylistService(object: PlaylistAPI() {})
-    private val repository = PlayListRepository(service)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,9 +30,9 @@ class PlaylistFragment : Fragment() {
         setupViewModel()
 
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
-            if(playlists.getOrNull() !=null){
+            if (playlists.getOrNull() != null) {
                 setupList(view, playlists.getOrNull()!!)
-            }else{
+            } else {
                 TODO()
             }
 
@@ -47,7 +51,6 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(PlaylistViewModel::class.java)
     }
 

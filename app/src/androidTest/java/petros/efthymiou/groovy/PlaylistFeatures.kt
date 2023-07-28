@@ -38,7 +38,7 @@ class PlaylistFeatures {
         assertRecyclerViewItemCount(R.id.playlist_list, 10)
         onView(
             allOf(
-                withId(R.id.playlist_list),
+                withId(R.id.playlist_name),
                 isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
             )
         ).check(matches(withText("Hard Rock Cafe")))
