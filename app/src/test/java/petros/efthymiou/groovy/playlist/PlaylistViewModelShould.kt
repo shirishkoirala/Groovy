@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import petros.efthymiou.groovy.utils.BaseUnitTest
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 
 /**
@@ -39,26 +40,54 @@ class PlaylistViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitErrorWhenReceiveError() {
-        runBlocking {
-            whenever(repository.getPlaylists()).thenReturn(
-                flow {
-                    emit(Result.failure<List<Playlist>>(exception))
-                }
-            )
-        }
-        val viewModel = PlaylistViewModel(repository)
+        val viewModel = mockFailingCase()
         assertEquals(exception, viewModel.playlists.getValueForTest()!!.exceptionOrNull())
+    }
+
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterPlaylistsLoad() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+            assertEquals(false, values.last())
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterError() = runBlockingTest {
+        val viewModel = mockFailingCase()
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+
+            assertEquals(false, values.last())
+        }
     }
 
     private fun mockSuccessfulCase(): PlaylistViewModel {
         runBlocking {
-            whenever(repository.getPlaylists()).thenReturn(
-                flow {
-                    emit(expected)
-                }
-            )
+            whenever(repository.getPlaylists()).thenReturn(flow {
+                emit(expected)
+            })
         }
 
+        return PlaylistViewModel(repository)
+    }
+    private fun mockFailingCase(): PlaylistViewModel {
+        runBlocking {
+            whenever(repository.getPlaylists()).thenReturn(flow {
+                emit(Result.failure<List<Playlist>>(exception))
+            })
+        }
         return PlaylistViewModel(repository)
     }
 }
