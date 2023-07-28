@@ -14,7 +14,8 @@ import petros.efthymiou.groovy.R
 class PlaylistFragment : Fragment() {
     lateinit var viewModel: PlaylistViewModel
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val repository = PlayListRepository()
+    private val service = PlaylistService()
+    private val repository = PlayListRepository(service)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
