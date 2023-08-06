@@ -1,8 +1,7 @@
 package petros.efthymiou.groovy
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.unregisterIdlingResources
-import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -16,7 +15,6 @@ import com.schibsted.spain.barista.internal.matcher.DrawableMatcher.Companion.wi
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
-import petros.efthymiou.groovy.playlist.idelingResource
 
 class PlaylistFeatures : BaseUITest() {
 
@@ -82,6 +80,18 @@ class PlaylistFeatures : BaseUITest() {
             )
         ).check(matches(withDrawable(R.mipmap.rock)))
             .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navigateToDetailsScreen() {
+        onView(
+            allOf(
+                withId(R.id.playlist_image),
+                isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 0))
+            )
+        ).perform(click())
+
+        assertDisplayed(R.id.playlist_detail_root)
     }
 
 }
