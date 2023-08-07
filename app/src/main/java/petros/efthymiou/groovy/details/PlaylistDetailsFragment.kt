@@ -9,9 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_playlist_detail.playlist_details
-import kotlinx.android.synthetic.main.fragment_playlist_detail.playlist_name
-import petros.efthymiou.groovy.R
+import petros.efthymiou.groovy.databinding.FragmentPlaylistDetailBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -20,6 +18,7 @@ class PlaylistDetailsFragment : Fragment() {
     val args: PlaylistDetailsFragmentArgs by navArgs()
 
     lateinit var viewModel: PlaylistDetailsViewModel
+    private lateinit var binding: FragmentPlaylistDetailBinding
 
     @Inject
     lateinit var viewModelFactory: PlaylistDetailsViewModelFactory
@@ -32,7 +31,7 @@ class PlaylistDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_playlist_detail, container, false)
+        binding = FragmentPlaylistDetailBinding.inflate(inflater, container, false)
         val id = args.playlistId
 
         setupViewModel()
@@ -40,7 +39,7 @@ class PlaylistDetailsFragment : Fragment() {
 
         observeLiveData()
 
-        return view
+        return binding.root
     }
 
     private fun observeLiveData() {
@@ -60,8 +59,8 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun setupUI(playlistDetails: Result<PlaylistDetails>) {
-        playlist_name.text = playlistDetails.getOrNull()!!.name
-        playlist_details.text = playlistDetails.getOrNull()!!.details
+        binding.playlistName.text = playlistDetails.getOrNull()!!.name
+        binding.playlistDetails.text = playlistDetails.getOrNull()!!.details
     }
 
     companion object {

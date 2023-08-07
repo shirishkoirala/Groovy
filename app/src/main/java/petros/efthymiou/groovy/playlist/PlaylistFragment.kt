@@ -11,9 +11,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_playlist.loader
-import kotlinx.android.synthetic.main.fragment_playlist.view.playlist_list
 import petros.efthymiou.groovy.R
+import petros.efthymiou.groovy.databinding.FragmentPlaylistBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,37 +21,37 @@ class PlaylistFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: PlaylistViewModelFactory
-
+    private lateinit var binding: FragmentPlaylistBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_playlist, container, false)
+        binding = FragmentPlaylistBinding.inflate(inflater, container, false)
 
         setupViewModel()
 
         observeLoader()
 
-        observePlaylist(view)
+        observePlaylist()
 
-        return view
+        return binding.root
     }
 
     private fun observeLoader() {
         viewModel.loader.observe(this as LifecycleOwner) { loading ->
             when (loading) {
-                true -> loader.visibility = View.VISIBLE
-                false -> loader.visibility = View.INVISIBLE
+                true -> binding.loader.visibility = View.VISIBLE
+                false -> binding.loader.visibility = View.INVISIBLE
             }
 
         }
     }
 
-    private fun observePlaylist(view: View) {
+    private fun observePlaylist() {
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
             if (playlists.getOrNull() != null) {
-                setupList(view.playlist_list, playlists.getOrNull()!!)
+                setupList(binding.playlistList, playlists.getOrNull()!!)
             } else {
                 TODO()
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="petros.efthymiou.groovy">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:name=".GroovyApplication"
-        android:theme="@style/Theme.Groovy">
+        android:theme="@style/Theme.Groovy"
+        tools:targetApi="m">
         <activity android:name=".MainActivity"
-            android:label="Playlists">
+            android:label="Playlists"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
