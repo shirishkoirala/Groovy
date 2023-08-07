@@ -1,10 +1,9 @@
 package petros.efthymiou.groovy.details
 
-import javax.inject.Inject
+import retrofit2.http.GET
+import retrofit2.http.Path
 
-class PlaylistDetailsAPI @Inject constructor() {
-    suspend fun fetchPlaylistDetails(id: String): PlaylistDetails {
-        TODO()
-    }
-
+interface PlaylistDetailsAPI {
+    @GET("playlist-details/{id}")
+    suspend fun fetchPlaylistDetails(@Path("id") id: String): PlaylistDetails
 }
