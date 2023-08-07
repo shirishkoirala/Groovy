@@ -7,10 +7,10 @@ import petros.efthymiou.groovy.playlist.PlaylistViewModel
 import javax.inject.Inject
 
 class PlaylistDetailsViewModelFactory @Inject constructor(
-    private val repository: PlayListRepository
+    private val service: PlaylistDetailsService
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return PlaylistViewModel(repository) as T
+        return PlaylistDetailsViewModel(service) as T
     }
 }
